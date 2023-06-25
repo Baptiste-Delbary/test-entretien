@@ -7,5 +7,6 @@ export default {
   },
   reponses: {
     creer: async (depot) => (await axios.post('/v1/demande-clinique/reponses', depot)).data,
+    edit: async (id, titre, description, type, validate, reason) => (await axios.put(`/v1/demande-clinique/reponses/${id}`, {titre, description, type, validate, reason})).data,
   }
 };

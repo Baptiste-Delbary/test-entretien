@@ -26,6 +26,14 @@ class ReponseManager
         $this->reponseValidator = $reponseValidator;
     }
 
+    /**
+     * Crée une nouvelle réponse
+     * @param Depot $depot
+     * @param string $titre
+     * @param string $description
+     * @param int $type
+     * @return Reponse
+     */
     public function creer(Depot $depot, string $titre, string $description, int $type): Reponse
     {
         $reponse = $this->reponseFactory->creer($depot, $titre, $description, $type);
@@ -33,6 +41,27 @@ class ReponseManager
         $this->reponseValidator->valider($reponse);
 
         $this->entityManagerInterface->persist($reponse);
+        $this->entityManagerInterface->flush();
+
+        return $reponse;
+    }
+
+    /**
+     * Edit la réponse donnée
+     * @param Reponse $reponse
+     * @param string $titre
+     * @param string $description
+     * @param int $type
+     * @param bool $validate
+     * @param string $reason
+     * @return Reponse
+     */
+    public function edit(Reponse $reponse, string $titre, string $description, int $type, bool $validate, string $reason): Reponse
+    {
+        $reponse = $this->reponseFactory->edit($reponse, $titre, $description, $type, $validate, $reason);
+
+        $this->reponseValidator->valider($reponse);
+
         $this->entityManagerInterface->flush();
 
         return $reponse;
