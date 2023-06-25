@@ -9,6 +9,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import EventBus, { EVENT_LOAD_DEPOTS } from '@/eventBus.js';
 
 export default {
   name: 'App',
@@ -17,14 +18,27 @@ export default {
       loading: true,
     };
   },
+  mounted() {
+    this.chargerPageDepots();
+
+    EventBus.$on(EVENT_LOAD_DEPOTS, () => {
+      this.chargerPageDepots();
+    });
+  },
   methods: {
     ...mapActions({
       chargerDepots: 'demande_clinique/chargerDepots',
     }),
-  },
-  mounted: async function () {
-    await this.chargerDepots();
-    this.loading = false;
+
+    /**
+     * Charge la liste des dépots
+     * @returns {void}
+     */
+    async chargerPageDepots() {
+      this.loading = true;
+      await this.chargerDepots();
+      this.loading = false;
+    }
   },
 };
 </script>
